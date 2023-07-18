@@ -1,0 +1,2 @@
+include shared/interface/*.h
+include shared/src/cpu/*.h
