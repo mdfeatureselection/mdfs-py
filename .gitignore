@@ -4,3 +4,5 @@ __pycache__
 # Python build/setuptools
 dist/
 *.egg-info/
+build/*
+venv/*

@@ -49,6 +49,7 @@ def run(data, decision, *, n_contrast=None, dimensions=1, divisions=1, discretiz
     mdfs_result = {
         "chi_squared": chi2.sf(ig_result.max_igs * math.log(2) * 2, common_df),
     }
+    print(mdfs_result)
 
     if fit_mode == "raw":
         mdfs_result["p_value"] = mdfs_result["chi_squared"]
