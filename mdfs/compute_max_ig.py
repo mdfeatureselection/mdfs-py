@@ -97,13 +97,14 @@ def compute_max_ig(data, decision, contrast_data=None, dimensions=1, divisions=1
     iv_count = 0 if interesting_vars is None else len(interesting_vars)
     in_interesting = (c_int * iv_count)(*interesting_vars) if interesting_vars else (c_int * iv_count)()
 
+
     if contrast_data is not None:
         if contrast_data.shape[0] != data.shape[0]:
             raise Exception("contrast_data must have the same object count as data")
         n_contrast_variables = contrast_data.shape[1]
     else:
         n_contrast_variables = 0
-
+        
     result = funs.compute_max_ig(obj_count, var_count, data, n_contrast_variables, contrast_data, decision, c_int(dimensions),
                                     c_int(divisions), c_int(discretizations), c_int(seed),
                                     c_double(range_), c_double(pc_xi), c_bool(return_tuples), iv_count,
@@ -111,8 +112,20 @@ def compute_max_ig(data, decision, contrast_data=None, dimensions=1, divisions=1
 
     return handle_error(result)
 
+def prepare_integer_in_bounds(x, x_desc, lower_bound, upper_bound):
+    if not isinstance(x, int):
+        raise Exception(" divisions has to be an integer.")
 
-def compute_max_ig_discrete(data, decision, contrast_data=None, dimensions=1, pc_xi=0.25, return_tuples=False,
+    
+    if x < lower_bound:
+        raise Exception(f"{x_desc} must be at least {lower_bound}.")
+    
+    if x > upper_bound:
+        raise Exception(f"{x_desc} must be at most {upper_bound}.")
+    
+    return x
+
+def compute_max_ig_discrete(data, decision, contrast_data=None, dimensions=1, divisions=1, pc_xi=0.25, return_tuples=False,
                    interesting_vars=None, require_all_vars=False):
 
     obj_count, var_count = data.shape
@@ -120,8 +133,8 @@ def compute_max_ig_discrete(data, decision, contrast_data=None, dimensions=1, pc
     if len(decision) != obj_count:
         raise Exception("Length of decision is not equal to the number of rows in data.")
 
-    seed = -1 if seed is None else seed
-    range_ = -1 if range_ is None else range_
+    seed = -1
+    range_ = -1
 
     iv_count = 0 if interesting_vars is None else len(interesting_vars)
     in_interesting = (c_int * iv_count)(*interesting_vars) if interesting_vars else (c_int * iv_count)()
@@ -132,8 +145,15 @@ def compute_max_ig_discrete(data, decision, contrast_data=None, dimensions=1, pc
         n_contrast_variables = contrast_data.shape[1]
     else:
         n_contrast_variables = 0
-
+    
     divisions = len(set(data)) - 1
+    # if divisions!= None and divisions <= 0:
+    #     # divisions = len(set(data)) - 1
+    #     unique_values = np.unique(data)
+    #     divisions = len(unique_values) - 1
+    #     divisions = prepare_integer_in_bounds(divisions,"Divisions",1,15)
+
+
     if contrast_data is not None:
         contrast_divisions = len(set(contrast_data)) - 1
         if contrast_divisions != divisions:

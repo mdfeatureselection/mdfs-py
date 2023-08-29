@@ -6,3 +6,12 @@ dist/
 *.egg-info/
 build/*
 venv/*
+
+examples/*.py
+data/all_madelon_dat.csv
+data/all_madelon_dat_py.csv
+data/all_madelon_dat_sub_10.csv
+data/all_madelon_dat_py_sub_10.csv
+data/*.txt
+data/*.json
+data/madelon_50.csv

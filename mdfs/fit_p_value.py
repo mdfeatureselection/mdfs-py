@@ -43,13 +43,17 @@ funs.fit_p_value.restype = FitPValueResult
 
 
 def fit_p_value(chisq, chisq_contrast, *,
-                exponential_fit,
+                exponential_fit=None,
                 irr_vars_num=None, ign_low_ig_vars_num=None,
                 min_irr_vars_num=None, max_ign_low_ig_vars_num=None,
                 search_points=8):
 
     n_vars = len(chisq)
-    n_contrasts = len(chisq_contrast)
+
+    if chisq_contrast!= None:
+        n_contrasts = len(chisq_contrast)
+    else:
+        n_contrasts = -1
 
     irr_vars_num = -1 if irr_vars_num is None else irr_vars_num
     ign_low_ig_vars_num = -1 if ign_low_ig_vars_num is None else ign_low_ig_vars_num

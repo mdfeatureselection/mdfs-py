@@ -1,5 +1,4 @@
 #include "common.h"
-
 #include <vector>
 #include <cmath>
 #include <limits>
@@ -150,6 +149,11 @@ PVFit_Result fit_p_value(
     if(var_count < 4)
     {
         result.error = (char*) "IG needs at least 4 values";
+        return result;
+    }
+
+    if(contrast_count < 4){
+        result.error = (char*) "Contrast data needs at least 4 values";
         return result;
     }
 

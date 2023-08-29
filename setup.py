@@ -53,6 +53,7 @@ setup(
                 "shared/src/cpu/common.cpp",
                 "shared/src/cpu/discretize.cpp",
             ],
+            extra_compile_args=['-std=c++14', '-Wall', '-Wextra'],  # Add your compiler flags here
         ),
     ],
     cmdclass={"build_ext": build_ext, "bdist_wheel": bdist_wheel_abi_none},
