@@ -153,6 +153,12 @@ PVFit_Result fit_p_value(
         return result;
     }
 
+    if(contrast_count < 4)
+    {
+        result.error = (char*) "Contrast IG needs at least 4 values";
+        return result;
+    }
+
     if(min_irr_vars_num == -1)
     {
         min_irr_vars_num = std::min(contrast_count / 3, 30);
