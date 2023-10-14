@@ -4,3 +4,6 @@ __pycache__
 # Python build/setuptools
 dist/
 *.egg-info/
+
+# Custom Python venv
+.venv/
