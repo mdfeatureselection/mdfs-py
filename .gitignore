@@ -7,3 +7,9 @@ dist/
 
 # Custom Python venv
 .venv/
+
+# Temporary data
+/data/test_contrast_variables\.csv
+
+# macOS
+\.DS_Store
