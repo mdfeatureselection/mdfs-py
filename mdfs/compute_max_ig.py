@@ -133,9 +133,6 @@ def compute_max_ig_discrete(data, decision, contrast_data=None, dimensions=1, di
     if len(decision) != obj_count:
         raise Exception("Length of decision is not equal to the number of rows in data.")
 
-    seed = -1
-    range_ = -1
-
     iv_count = 0 if interesting_vars is None else len(interesting_vars)
     in_interesting = (c_int * iv_count)(*interesting_vars) if interesting_vars else (c_int * iv_count)()
 

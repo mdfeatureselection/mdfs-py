@@ -48,7 +48,7 @@ setup(
                 "shared/interface/get_suggested_range.cpp",
                 "shared/interface/free_helpers.cpp",
                 "shared/interface/discretize.cpp",
-                "shared/interface/fit_p_value.cpp",
+                "shared/interface/fit_utils.cpp",
                 "shared/interface/gen_contrast_variables.cpp",
                 "shared/src/cpu/common.cpp",
                 "shared/src/cpu/discretize.cpp",

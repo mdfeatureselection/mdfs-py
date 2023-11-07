@@ -54,8 +54,8 @@ def run(data, decision, *, n_contrast=None, dimensions=1, divisions=1, discretiz
         mdfs_result["p_value"] = mdfs_result["chi_squared"]
     else:  # lin or exp
         contrast_chi_squared = chi2.sf(ig_result.max_igs_contrast * math.log(2) * 2, common_df)
-        fpv_result = fit_p_value(mdfs_result["chi_squared"], contrast_chi_squared,
-                                 exponential_fit=(fit_mode=="exp"))
+        fpv_result = fit_p_value(chisq=mdfs_result["chi_squared"], chisq_contrast=contrast_chi_squared,
+                                 exponential_fit=(fit_mode=="exp"),dimensions=dimensions)
         mdfs_result["p_value"] = fpv_result.p_values.copy()
     
     (rejections, adjusted_p_value, _, _) = multipletests(mdfs_result["p_value"], alpha=level, method=p_adjust_method)
