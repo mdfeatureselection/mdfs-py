@@ -15,3 +15,12 @@ data/all_madelon_dat_py_sub_10.csv
 data/*.txt
 data/*.json
 data/madelon_50.csv
+
+# Custom Python venv
+.venv/
+
+# Temporary data
+/data/test_contrast_variables\.csv
+
+# macOS
+\.DS_Store
