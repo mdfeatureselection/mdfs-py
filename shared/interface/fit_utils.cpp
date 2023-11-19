@@ -35,78 +35,12 @@ struct calcS_params
     }
 };
 
-void calc_SSS(int n0i, int n_var, const std::vector<int>& K, const std::vector<double>& L,
-            const std::vector<double>& Sw, const std::vector<double>& Sv,
-            const std::vector<double>& Swv, const std::vector<double>& Swv2,
-            const std::vector<double>& Swl, const std::vector<double>& Swl2,
-            const std::vector<double>& Swlv, const std::vector<double>& Srt,
-            int dimensions, const bool one_dim_mode, 
-            double* S, double* alpha, double* d_alpha)
-{
-    
-    std::cout << "n0i " << n0i << std::endl;
-    int npt = n_var - n0i+1;
-    
-    // Create sub-vectors 'k' and 'l' by taking slices of 'K' and 'L'
-    std::vector<int> k(K.begin() , K.begin() + npt );
-    std::vector<double> l(L.begin(), L.begin() + npt);
-
-    // Create sub-vectors 'sw', 'sv', 'swv', 'swv2', 'swl', 'swl2', 'swlv', and 'srt'
-    std::vector<double> sw(Sw.begin() + n0i, Sw.end());
-    std::vector<double> sv(Sv.begin() + n0i, Sv.end());
-    std::vector<double> swv(Swv.begin() + n0i, Swv.end());
-    std::vector<double> swv2(Swv2.begin() + n0i, Swv2.end());
-    std::vector<double> swl(Swl.begin() + n0i, Swl.end());
-    std::vector<double> swl2(Swl2.begin() + n0i, Swl2.end());
-    std::vector<double> swlv(Swlv.begin() + n0i, Swlv.end());
-    std::vector<double> srt(Srt.begin() + n0i, Srt.end());
-
-        // Initialize variables for S, alpha, d_alpha
-    if (dimensions > 1 || one_dim_mode ) {
-        for (int i = 0; i < npt; ++i) {
-            alpha[i] = sv[i] / k[i];
-            S[i] = (
-                swv2[i] 
-                + 2 * alpha[i] * swlv[i] 
-                - 2 * alpha[i] * l[i] * swv[i] 
-                + alpha[i] * alpha[i] * swl2[i] 
-                - 2 * alpha[i] * alpha[i] * l[i] * swl[i] 
-                + ((alpha[i] * l[i]) * (alpha[i] * l[i])) * sw[i]
-                );
-            d_alpha[i] = S[i] / (
-                swl2[i] 
-                - 2 * l[i] * swl[i] 
-                + l[i] * l[i] * sw[i]
-                );
-        }
-    } else {
-        for (int i = 0; i < npt; ++i) {
-            if (!one_dim_mode) {
-                alpha[i] = 1.0;
-            } else {
-                alpha[i] = (swv[i] - swlv[i] / l[i]) / (sw[i] - 2 * swl[i] / l[i] + swl2[i] / (l[i] * l[i]));
-            }
-            S[i] = (swv2[i] - 2 * alpha[i] * swv[i] + 2 * alpha[i] / l[i] * swlv[i] + alpha[i] * alpha[i] * sw[i] - 2 * alpha[i] * alpha[i] / l[i] * swl[i] + alpha[i] * alpha[i] / (l[i] * l[i]) * swl2[i]);
-            d_alpha[i] = S[i] / (sw[i] - 2 * swl[i] / l[i] + swl2[i] / (l[i] * l[i]));
-        }
-    }
-
-    double* result = new double[npt];
-    double* padded_S = new double[npt + 1];
-    padded_S[0] = 0;
-    std::copy(result, result + npt, padded_S + 1);
-
-    for (int i = 0; i < npt; ++i) {
-        result[i] = (padded_S[i] + srt[i]) / sw[npt-1];
-    }
-}
-
 calcS_params calc_SSSS(int n0i, int n_var, const std::vector<int>& K, const std::vector<double>& L,
     const std::vector<double>& Sw, const std::vector<double>& Sv,
     const std::vector<double>& Swv, const std::vector<double>& Swv2,
     const std::vector<double>& Swl, const std::vector<double>& Swl2,
     const std::vector<double>& Swlv, const std::vector<double>& Srt,
-    int dimensions, const bool one_dim_mode) 
+    const bool one_dim_mode) 
 {
 
     int npt = n_var - n0i ;
@@ -140,7 +74,7 @@ calcS_params calc_SSSS(int n0i, int n_var, const std::vector<int>& K, const std:
     double* alpha = new double[npt];
     double* d_alpha = new double[npt];
 
-    if (dimensions > 1 || one_dim_mode) {
+    if (one_dim_mode) {
         for (int i = 0; i < npt; ++i) {
             alpha[i] = sv[i] / k[i];
             S[i] = (
@@ -220,7 +154,6 @@ PVFit_Result fit_p_value_(
     double* chisq,
     int contrast_count,
     double* chisq_contrast,
-    int dimensions, 
     bool one_dim_mode,
     int irr_vars_num,
     int ign_low_ig_vars_num,
@@ -337,7 +270,7 @@ PVFit_Result fit_p_value_(
     }
 
     // Check conditions and calculate L and W accordingly
-    if (dimensions > 1 || one_dim_mode) {
+    if (one_dim_mode) {
         for (int i = 0; i < contrast_count; ++i) {
             L[i] = std::log(K[i]);
         }
@@ -416,7 +349,7 @@ PVFit_Result fit_p_value_(
             step = std::max(1, (int)round((n0_max - n0_min) / (double)search_points));
             int n0_i = n0_min;
             while (n0_i<n0_max) {
-                calcS_params params = calc_SSSS(n0_i, contrast_count, K, L, Sw, Sv, Swv, Swv2, Swl, Swl2, Swlv, Srt, dimensions, one_dim_mode);
+                calcS_params params = calc_SSSS(n0_i, contrast_count, K, L, Sw, Sv, Swv, Swv2, Swl, Swl2, Swlv, Srt, one_dim_mode);
                 int nv_i = calculate_nvi(irr_vars_num,min_irr_vars_num,params.S,params.data_count);
                 nv_i--; // bringing index base to 0
                 double Si = params.S[nv_i];

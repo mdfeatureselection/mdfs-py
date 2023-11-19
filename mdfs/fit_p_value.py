@@ -32,7 +32,6 @@ funs.fit_p_value_.argtypes = [
     p_value_type,  # chisq
     c_int,  # contrast_count
     p_value_type,  # chisq_contrast
-    c_int, #dimensions
     c_bool,  # exponential fit
     c_int,  # irr_vars_num
     c_int,  # ign_low_ig_vars_num
@@ -44,8 +43,7 @@ funs.fit_p_value_.restype = FitPValueResult
 
 
 def fit_p_value(chisq, chisq_contrast, *,
-                dimensions=None,
-                exponential_fit=None,
+                exponential_fit=False,
                 irr_vars_num=None, ign_low_ig_vars_num=None,
                 min_irr_vars_num=None, max_ign_low_ig_vars_num=None,
                 search_points=8):
@@ -59,7 +57,7 @@ def fit_p_value(chisq, chisq_contrast, *,
     max_ign_low_ig_vars_num = -1 if max_ign_low_ig_vars_num is None else max_ign_low_ig_vars_num
 
     result = funs.fit_p_value_(c_int(n_vars), chisq, c_int(n_contrasts), chisq_contrast,
-                                 c_int(dimensions),c_bool(exponential_fit),
+                                 c_bool(exponential_fit),
                                  c_int(irr_vars_num), c_int(ign_low_ig_vars_num),
                                  c_int(min_irr_vars_num), c_int(max_ign_low_ig_vars_num),
                                  c_int(search_points))

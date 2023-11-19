@@ -125,7 +125,7 @@ def prepare_integer_in_bounds(x, x_desc, lower_bound, upper_bound):
     
     return x
 
-def compute_max_ig_discrete(data, decision, contrast_data=None, dimensions=1, divisions=1, pc_xi=0.25, return_tuples=False,
+def compute_max_ig_discrete(data, decision, contrast_data=None, divisions=1, pc_xi=0.25, return_tuples=False,
                    interesting_vars=None, require_all_vars=False):
 
     obj_count, var_count = data.shape
@@ -142,14 +142,7 @@ def compute_max_ig_discrete(data, decision, contrast_data=None, dimensions=1, di
         n_contrast_variables = contrast_data.shape[1]
     else:
         n_contrast_variables = 0
-    
     divisions = len(set(data)) - 1
-    # if divisions!= None and divisions <= 0:
-    #     # divisions = len(set(data)) - 1
-    #     unique_values = np.unique(data)
-    #     divisions = len(unique_values) - 1
-    #     divisions = prepare_integer_in_bounds(divisions,"Divisions",1,15)
-
 
     if contrast_data is not None:
         contrast_divisions = len(set(contrast_data)) - 1

@@ -13,5 +13,5 @@ chisq_contrast_Dat = chisq_contrast.iloc[:,0].to_numpy()
 dimensions = 2
 exponential_fit="exp"
 
-ddd = (mdfs.fit_p_value(chisq=chisq_dat,chisq_contrast=chisq_contrast_Dat,exponential_fit= (exponential_fit == "exp"),dimensions=dimensions))
+ddd = (mdfs.fit_p_value(chisq=chisq_dat,chisq_contrast=chisq_contrast_Dat,exponential_fit= (exponential_fit == "exp")))
 print(ddd.p_values)

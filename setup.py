@@ -38,6 +38,8 @@ class bdist_wheel_abi_none(_bdist_wheel):
 
 
 setup(
+    name='mdfs',
+    version='1.5.2',
     packages=["mdfs"],
     ext_modules=[
         CTypesExtension(

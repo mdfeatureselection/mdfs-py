@@ -145,7 +145,7 @@ def compute_tuples(data, decision=None, *, dimensions=2, divisions=1,
     return handle_error(result)
 
 
-def compute_tuples_discrete(data, decision=None, *, divisions = 1, dimensions=2, pc_xi=0.25,
+def compute_tuples_discrete(data, decision=None, *, dimensions=2, pc_xi=0.25,
                    ig_thr=0.0, i_lower=None,
                    interesting_vars=None, require_all_vars=False, return_matrix=False,
                    stat_mode=StatMode.MI) -> ComputeTuplesResult:
@@ -172,7 +172,7 @@ def compute_tuples_discrete(data, decision=None, *, divisions = 1, dimensions=2,
         if len(i_lower) != var_count:
             raise Exception("i_lower should have the length of variables count.")
 
-    # divisions = len(set(data)) - 1
+    divisions = len(set(data)) - 1
 
     result = funs.compute_tuples_discrete(obj_count, var_count, data, decision,
                                  c_int(dimensions), c_int(divisions), c_double(pc_xi), iv_count,

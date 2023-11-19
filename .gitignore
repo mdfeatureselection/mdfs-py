@@ -14,4 +14,4 @@ venv/*
 /data/test_contrast_variables\.csv
 
 # macOS
-\.DS_Store
+.DS_Store
