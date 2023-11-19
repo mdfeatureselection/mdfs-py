@@ -38,6 +38,8 @@ class bdist_wheel_abi_none(_bdist_wheel):
 
 
 setup(
+    name='mdfs',
+    version='1.5.2',
     packages=["mdfs"],
     ext_modules=[
         CTypesExtension(
@@ -48,11 +50,12 @@ setup(
                 "shared/interface/get_suggested_range.cpp",
                 "shared/interface/free_helpers.cpp",
                 "shared/interface/discretize.cpp",
-                "shared/interface/fit_p_value.cpp",
+                "shared/interface/fit_utils.cpp",
                 "shared/interface/gen_contrast_variables.cpp",
                 "shared/src/cpu/common.cpp",
                 "shared/src/cpu/discretize.cpp",
             ],
+            extra_compile_args=['-std=c++14', '-Wall', '-Wextra'],  # Add your compiler flags here
         ),
     ],
     cmdclass={"build_ext": build_ext, "bdist_wheel": bdist_wheel_abi_none},
